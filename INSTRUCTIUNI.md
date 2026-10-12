@@ -1,103 +1,77 @@
-# Sistem Antrenament — instructiuni de instalare
+# Sistem Antrenament — versiunea 2 (12 octombrie 2026)
 
 ## Fisiere
-1. **app.compiled.js** — aplicatia
-2. **index.html** — pagina care porneste aplicatia
+1. **app.compiled.js** — aplicatia (singurul fisier schimbat)
+2. **index.html** — neschimbat fata de prima versiune
 3. **INSTRUCTIUNI.md** — acest fisier
 
-## Deploy (GitHub Pages)
-1. Fa un **repository NOU** (de exemplu `Antrenament-Tata`). Nu il pune peste LvlUP-v3.
-2. Urca ambele fisiere: `app.compiled.js` si `index.html` (nume exacte, cu PUNCT la app.compiled.js).
-3. Settings → Pages → Branch: main → Save.
-4. Asteapta 2-3 minute, apoi deschide linkul in Safari.
-5. Share → **Add to Home Screen**, ca sa arate ca o aplicatie adevarata.
+## Deploy
+1. Drag & drop `app.compiled.js` peste cel existent, in repo (nume exact, cu PUNCT).
+2. Commit, astepti 2-3 minute, deschizi in Safari privat sau dai clear cache.
+3. Datele raman intacte. Istoricul de greutati la sala nu se pierde.
 
-> **Important:** baza de date se numeste `AntrenamentRO_DB`, alta decat cea din aplicatia ta
-> (`SoloLevelingDB`). Chiar daca ajung pe acelasi cont GitHub Pages, datele NU se amesteca.
-> Daca ai fi pastrat acelasi nume, cele doua aplicatii si-ar fi suprascris reciproc salvarile.
+## Ce s-a schimbat
 
-## Ce e diferit fata de aplicatia ta
+### Scos complet
+- Misiunile zilnice: cei 10.000 de pasi si proteina. Nu se bifau.
+- Obiectivele saptamanale (sauna).
+- Somnul si fereastra obligatorie de somn.
+- Cantarirea si fereastra de luni. Greutatea se tine pe cantarul cu bioimpedanta, separat.
+- Taburile AZI si CORP. Au ramas trei: **SALA · PROGRES · SETARI**.
 
-### Text
-- Corp de text 21px, titluri 24-34px, cifre mari 46px.
-- Butoane inalte, casete de introdus date cu cifre de 24px.
-- Pinch-to-zoom permis (am scos `user-scalable=no`).
-- Totul in romana, fara diacritice, ca sa nu se strice la niciun copy-paste.
+### Penalizari
+Acum se penalizeaza doar exercitiile sarite dintr-o zi de antrenament, cate 10 XP.
+Exercitiile de abdomen si mersul pe banda nu se penalizeaza niciodata.
+Weekendul si modul plecare raman fara penalizari.
 
-### Scos
-- Bosii (tot tabul si toata librăria).
-- Bonusurile de antrenament (100 flotari, kettlebell, hollow hold etc.).
-- Dusul rece.
-- Yoga din obiectivele saptamanale.
-- Cardio 30 minute.
-- Procentul de grasime — nu apare nicaieri.
-- Partea de invatare AI, podcast, carti, social (era deja dezactivata).
+### Nivel recalculat
+La prima deschidere, aplicatia recalculeaza nivelul din antrenamentele chiar facute
+(122 de exercitii logate pana acum) si sterge istoricul vechi de penalizari.
+**Trece de la nivelul 2 la nivelul 8, RANG D.** Apare o notificare care anunta asta.
+Se intampla o singura data.
 
-### Pastrat
-- Niveluri, XP, ranguri, streak, multiplicatori.
-- Cele 5 statistici: STR, VIT, AGI, INT, PER.
-- Ranguri pe grupa musculara.
-- Penalizari zilnice si saptamanale, fara penalizari in weekend si in modul plecare.
-- Mod plecare / vacanta cu antrenamente acasa.
-- Cronometru de pauza cu sunet si vibratie.
-- Jurnal de greutati cu recomandare de progresie.
-- Schimbarea unui exercitiu pe ziua respectiva.
-- Salvare automata, export si import.
+### Intensitate marita
+Primele doua exercitii ale fiecarei zile: **4 serii** in loc de 3.
+Exercitiile de izolare: **3 serii** in loc de 2.
 
-### Adaugat
-- **10.000 de pasi** ca misiune zilnica (30 XP).
-- **Proteina**: 2 shake-uri + carne 280-310 g. Fara baton, fara jerky.
-- **Somnul** — fereastra obligatorie la deschiderea aplicatiei, in fiecare zi.
-- **Cantarirea** — fereastra obligatorie LUNEA. Doar greutatea, atat.
-  (Ambele au un „Mai tarziu" discret, ca sa nu ramana blocat daca nu are cantarul la indemana.)
-- Greutate tinta + grafic de evolutie in tabul CORP.
-- Reguli de siguranta si semne la care trebuie sa se opreasca imediat.
+| Zi | Inainte | Acum |
+|---|---|---|
+| Luni, Marti, Joi, Vineri | 16 serii | 20 serii |
+| Miercuri | 16 serii | 19 serii |
 
-## Programul de antrenament
+Regula de progresie e scrisa acum explicit in aplicatie:
+**intai o repetare in plus, apoi o serie in plus, abia la final kilograme.**
 
-Tot PPL, 5 zile, aceleasi zile ca la tine:
+### Plank
+Varianta normala, pe varfuri, nu pe genunchi. **3 × 30-45 secunde.**
+Si plank-ul lateral e acum pe talpi, 3 × 30 secunde pe parte.
+Varianta pe genunchi a ramas scrisa la "DACA E PREA GREU".
 
-| Zi | Tip |
-|----|-----|
-| Luni | Impingere (piept, umeri, triceps) |
-| Marti | Tragere (spate, biceps) |
-| Miercuri | Picioare |
-| Joi | Impingere |
-| Vineri | Tragere |
-| Sambata, Duminica | Odihna — doar pasii si proteina |
+### Bird dog scos
+Il apasa pe genunchi. Inlocuit cu **Dead bug** (culcat pe spate, brat si picior opus),
+care lucreaza exact aceiasi muschi stabilizatori, dar cu zero presiune pe genunchi.
+Schimbat si in programul de acasa.
 
-Adaptat pentru un om de aproape 60 de ani, supraponderal, la inceput:
+### Core nou miercurea
+**Mers cu gantera intr-o mana** (farmer carry pe o parte), 3 × 30 de pasi pe parte.
+Lucreaza lateralele abdomenului si muschii care tin coloana dreapta — acelasi lucru
+ca atunci cand cari o sacosa grea. Se face in picioare, fara nimic pe genunchi.
+Ca sa nu iasa ziua prea lunga, am scos puntea de fese din miercuri — presa de picioare
+si ridicarile de pe scaun acopera deja fesierii.
 
-- **6 exercitii pe zi**, nu 8. Antrenament de 45-55 de minute.
-- **Majoritar aparate**, nu bara libera. Aparatul ghideaza miscarea si iarta greselile de tehnica.
-- **Scoase complet**: indreptari de la sol, genuflexiuni cu bara pe spate, ramat aplecat cu bara,
-  ridicari de picioare atarnat, abdomene la banca inclinata negativ, rasuciri rusesti cu greutate.
-- **In locul lor**: presa de picioare cu amplitudine limitata la 90 de grade, ridicari de pe scaun,
-  ramat cu sprijin pe piept, plank pe genunchi, bird dog, presa Pallof.
-- **10-15 repetari**, greutati moderate, oprire cand mai poate face 2-3 repetari corecte.
-  Niciodata la epuizare.
-- **Pauze 90-150 secunde** — mai lungi decat la tine, refacerea e mai lenta la varsta asta.
-- Progresia creste cu 1-2,5 kg si doar dupa doua antrenamente curate la rand.
+### Mers pe banda, 20 de minute, luni-vineri
+Apare ca ultim exercitiu in fiecare zi de antrenament, dupa greutati.
+- 4,5-5,5 km/h, inclinatie 2-4 %, fara alergare
+- Ritmul corect: inca poate vorbi, dar nu ar putea canta
+- Fara tinut de bare
+- Da puncte la VIT si la grupa Inima / Cardio
+- In modul plecare devine **mers alert afara, 20 de minute**
 
-Fiecare exercitiu are explicatie completa, in romana:
-**CUM SE FACE · CE LUCREAZA · ATENTIE · DACA E PREA GREU**
+Sambata si duminica raman complet libere.
 
-### Siguranta
-In tabul SALA, deasupra exercitiilor, e un buton rosu cu regulile si cu semnele la care se
-opreste imediat: durere in piept, ameteala, respiratie care nu se linisteste, batai neregulate,
-durere care coboara in brat. Recomandarea de control medical inainte de start e scrisa acolo.
-
-## Modul plecare
-Se porneste din SETARI inainte sa plece. Atunci:
-- Antrenamentele de sala se inlocuiesc automat cu 5 zile de antrenament acasa,
-  cu banda elastica si greutatea corpului (flotari inclinate, ramat cu banda, ridicari de pe scaun etc.).
-- Zero penalizari.
-- Pasii si proteina raman la fel.
-
-## De verificat dupa instalare
-- La prima deschidere apare fereastra cu somnul.
-- Daca e luni, dupa somn apare si cantarirea.
-- Tabul SALA arata ziua curenta cu chenar mai deschis in selectorul de sus.
-- Apasa pe un exercitiu → se deschide cu explicatia si cu casetele pentru kg si repetari.
-- Butonul PAUZA porneste cronometrul; suna si vibreaza cand e gata.
-- SETARI → porneste modul plecare → SALA trebuie sa arate antrenamentele cu banda.
+## De verificat dupa deploy
+- La prima deschidere apare notificarea cu nivelul recalculat (nivelul 8).
+- Jos sunt doar trei butoane: SALA, PROGRES, SETARI.
+- Miercuri: apar "Mers cu gantera intr-o mana" si "Mers pe banda 20 de minute".
+- Luni: plank-ul scrie 3 × 30-45 secunde.
+- Marti: in loc de bird dog apare dead bug.

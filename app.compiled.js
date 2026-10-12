@@ -58,7 +58,7 @@ async function loadFromIDB() {
     return null;
   }
 }
-const SAVE_FIELDS = ["level", "xp", "stats", "done", "doneEx", "doneW", "totalXp", "qC", "streak", "weightLog", "muscleXp", "lastDailyReset", "lastWeeklyReset", "penaltyLog", "liftLog", "vacation", "sleepLog", "workoutCalendar", "exerciseSwaps", "targetWeight", "startDate"];
+const SAVE_FIELDS = ["level", "xp", "stats", "done", "doneEx", "doneW", "totalXp", "qC", "streak", "weightLog", "muscleXp", "lastDailyReset", "lastWeeklyReset", "penaltyLog", "liftLog", "vacation", "sleepLog", "workoutCalendar", "exerciseSwaps", "targetWeight", "startDate", "v2"];
 const DEFAULT_STATE = {
   level: 1,
   xp: 0,
@@ -290,7 +290,7 @@ function playSound(type) {
    grele de la sol, fara sarituri, fara epuizare.
    ═══════════════════════════════════════════════════ */
 
-const REGULI = ["Incalzire 8-10 minute INAINTE de primul exercitiu. Niciodata direct la greutate.", "Opreste setul cand mai poti face 2-3 repetari corecte. NU la epuizare.", "Nu tine niciodata respiratia. Expiri cand impingi sau tragi, inspiri cand revii.", "Miscari lente si controlate: 2 secunde la efort, 3 secunde la revenire.", "Greutatea creste doar cand faci toate seturile curat, la doua antrenamente la rand.", "Durere ascutita in articulatie = oprire imediata. Oboseala in muschi = normal.", "Intre exercitii bea apa. Un antrenament dureaza 45-55 de minute, nu mai mult."];
+const REGULI = ["Incalzire 8-10 minute INAINTE de primul exercitiu. Niciodata direct la greutate.", "Opreste setul cand mai poti face 2-3 repetari corecte. NU la epuizare.", "Nu tine niciodata respiratia. Expiri cand impingi sau tragi, inspiri cand revii.", "Miscari lente si controlate: 2 secunde la efort, 3 secunde la revenire.", "Progresia se face in ordinea asta: intai o repetare in plus, apoi o serie in plus, abia la final kilograme.", "Durere ascutita in articulatie = oprire imediata. Oboseala in muschi = normal.", "Intre exercitii bea apa. Antrenamentul dureaza 60-70 de minute, cu mersul pe banda la final."];
 const STOP_SEMNE = ["Durere sau apasare in piept", "Ameteala, vedere in ceata, greata", "Respiratie foarte grea care nu se linisteste", "Batai neregulate ale inimii", "Durere care coboara in brat sau in maxilar"];
 const PPL = {
   1: {
@@ -299,10 +299,10 @@ const PPL = {
     short: "PIEPT · UMERI · TRICEPS",
     color: "#ef4444",
     icon: "🔴",
-    nota: "Prima zi a saptamanii. Incepe usor, prinde tiparul miscarii. Astazi te cantaresti.",
+    nota: "Prima zi a saptamanii. Serii in plus fata de inainte - greutatea ramane aceeasi pana se aseaza tiparul.",
     exercises: [{
       name: "Presa de piept la aparat",
-      sets: "3 seturi × 10-12 repetari",
+      sets: "4 seturi × 10-12 repetari",
       muscle: "Piept",
       groups: ["piept", "triceps", "umeri"],
       rest: 120,
@@ -313,7 +313,7 @@ const PPL = {
       usor: "Scade greutatea si fa 12 repetari lente. Aparatul e cel mai sigur exercitiu de piept: te ghideaza singur."
     }, {
       name: "Presa de umeri la aparat",
-      sets: "3 seturi × 10-12 repetari",
+      sets: "4 seturi × 10-12 repetari",
       muscle: "Umeri",
       groups: ["umeri", "triceps"],
       rest: 120,
@@ -324,7 +324,7 @@ const PPL = {
       usor: "Fa doar 2 seturi in primele saptamani sau foloseste o greutate care iti permite 12 repetari lejere."
     }, {
       name: "Fluturari la aparat (Pec Deck)",
-      sets: "2 seturi × 12-15 repetari",
+      sets: "3 seturi × 12-15 repetari",
       muscle: "Piept",
       groups: ["piept"],
       rest: 90,
@@ -335,7 +335,7 @@ const PPL = {
       usor: "Greutate mica, 15 repetari. Aici cauti senzatia in muschi, nu greutatea."
     }, {
       name: "Ridicari laterale cu gantere",
-      sets: "2 seturi × 12-15 repetari",
+      sets: "3 seturi × 12-15 repetari",
       muscle: "Umeri",
       groups: ["umeri"],
       rest: 75,
@@ -356,17 +356,31 @@ const PPL = {
       atentie: "Coatele stau lipite de corp. Nu te apleca peste cablu si nu impinge cu tot corpul.",
       usor: "Coboara greutatea si fa 15 repetari. E un exercitiu de finisare, nu de forta."
     }, {
-      name: "Plank pe genunchi",
-      sets: "3 seturi × 20-30 secunde",
+      name: "Plank",
+      sets: "3 seturi × 30-45 secunde",
       muscle: "Abdomen",
       groups: ["abdomen"],
       rest: 60,
       repsOnly: true,
       finisher: true,
-      cum: "Sprijin pe antebrate si pe genunchi. Corpul in linie dreapta de la cap la genunchi. Strangi abdomenul si fesele. Respiri normal, numeri secundele.",
+      cum: "Sprijin pe antebrate si pe varfuri, NU pe genunchi. Corpul in linie dreapta de la cap la calcaie. Strangi abdomenul si fesele tot timpul. Respiri normal si numeri secundele. Tinta: 45 de secunde pe serie.",
       lucreaza: "Abdomenul si zona lombara - sprijinul coloanei.",
-      atentie: "Fara fundul ridicat si fara sale lasate. Daca te doare lombarul, opresti imediat.",
-      usor: "Incepe cu 15 secunde. Mai usor: acelasi lucru cu antebratele pe o banca inalta."
+      atentie: "Fara fund ridicat si fara sale lasate. In momentul in care salele incep sa cada, opresti seria - nu mai are rost tinut. Daca te doare lombarul, opresti imediat.",
+      usor: "Daca nu ajungi la 30 de secunde, imparte: 3 serii de 20 de secunde si creste cate 5 secunde pe saptamana, pana la 45."
+    }, {
+      name: "Mers pe banda 20 de minute",
+      sets: "1 serie × 20 de minute",
+      muscle: "Inima / Cardio",
+      groups: ["cardio"],
+      stat: "VIT",
+      rest: 0,
+      repsOnly: true,
+      finisher: true,
+      cardio: true,
+      cum: "La FINAL, dupa ce ai terminat exercitiile cu greutati. Ritm de plimbare vioaie: viteza 4,5-5,5 km/h, inclinatie 2-4 % daca banda are. Ritmul corect e acela in care inca poti vorbi, dar nu ai mai putea canta. Fara alergare, niciodata.",
+      lucreaza: "Inima, circulatia si arderea grasimii. Asta e partea care se vede cel mai mult pe cantar.",
+      atentie: "NU te tine de bare in timp ce mergi - strica postura si injumatateste efortul. Daca ti se taie respiratia, scazi viteza, nu te opresti brusc. Ultimele 2 minute le faci lent, ca sa cobori pulsul.",
+      usor: "Incepe cu 15 minute fara inclinatie si adaugi cate 5 minute pe saptamana. Daca genunchiul se incarca, dai inclinatia pe 0."
     }]
   },
   2: {
@@ -378,7 +392,7 @@ const PPL = {
     nota: "Ziua de spate. Spatele puternic inseamna postura mai buna si mai putina durere lombara.",
     exercises: [{
       name: "Tractiuni la helcometru",
-      sets: "3 seturi × 10-12 repetari",
+      sets: "4 seturi × 10-12 repetari",
       muscle: "Spate",
       groups: ["spate", "biceps"],
       rest: 120,
@@ -389,7 +403,7 @@ const PPL = {
       usor: "Alege o greutate cu care poti face 12 repetari controlat. Aici forma conteaza mai mult decat kilogramele."
     }, {
       name: "Ramat la aparat cu sprijin pe piept",
-      sets: "3 seturi × 10-12 repetari",
+      sets: "4 seturi × 10-12 repetari",
       muscle: "Spate",
       groups: ["spate", "biceps"],
       rest: 120,
@@ -400,7 +414,7 @@ const PPL = {
       usor: "Greutate mai mica si concentrare pe strangerea omoplatilor. Acest aparat inlocuieste ramatul aplecat cu bara, care e riscant pentru spate."
     }, {
       name: "Ramat la cablu sezand",
-      sets: "2 seturi × 12-15 repetari",
+      sets: "3 seturi × 12-15 repetari",
       muscle: "Spate",
       groups: ["spate"],
       rest: 90,
@@ -411,7 +425,7 @@ const PPL = {
       usor: "Greutate mica si trunchiul complet nemiscat."
     }, {
       name: "Face pull la cablu",
-      sets: "2 seturi × 15 repetari",
+      sets: "3 seturi × 15 repetari",
       muscle: "Umeri / Spate sus",
       groups: ["umeri", "spate"],
       rest: 60,
@@ -432,17 +446,31 @@ const PPL = {
       atentie: "Fara balans din spate. Coatele stau lipite de corp.",
       usor: "Fa-le sezand, alternativ, un brat pe rand."
     }, {
-      name: "Bird dog (caine-pasare)",
+      name: "Dead bug",
       sets: "3 seturi × 8 repetari pe parte",
       muscle: "Abdomen / Lombar",
-      groups: ["abdomen", "fesieri"],
+      groups: ["abdomen"],
       rest: 60,
       repsOnly: true,
       finisher: true,
-      cum: "In patru puncte, pe genunchi si palme. Intinzi simultan bratul drept in fata si piciorul stang in spate, tii 3 secunde, revii. Apoi invers. Spatele ramane drept, fara rotire.",
-      lucreaza: "Muschii care stabilizeaza coloana si fesierii.",
-      atentie: "Nu ridica piciorul mai sus decat linia corpului. Bazinul nu se roteste.",
-      usor: "Intinde doar bratul, apoi doar piciorul, separat."
+      cum: "Culcat pe spate, pe saltea. Bratele intinse in sus spre tavan, genunchii ridicati si indoiti la 90 de grade. Cobori incet spre podea bratul drept si piciorul stang in acelasi timp, apoi revii. Schimbi partea. Zero presiune pe genunchi.",
+      lucreaza: "Abdomenul profund, cel care tine coloana stabila. Face aceeasi treaba ca bird dog, dar fara sprijin pe genunchi.",
+      atentie: "Lombarul ramane lipit de podea tot timpul. Daca se ridica, cobori mai putin. Nu tine respiratia - expiri cand cobori.",
+      usor: "Misca doar bratele, apoi doar picioarele, separat. Sau cobori doar pe jumatate de drum."
+    }, {
+      name: "Mers pe banda 20 de minute",
+      sets: "1 serie × 20 de minute",
+      muscle: "Inima / Cardio",
+      groups: ["cardio"],
+      stat: "VIT",
+      rest: 0,
+      repsOnly: true,
+      finisher: true,
+      cardio: true,
+      cum: "La FINAL, dupa ce ai terminat exercitiile cu greutati. Ritm de plimbare vioaie: viteza 4,5-5,5 km/h, inclinatie 2-4 % daca banda are. Ritmul corect e acela in care inca poti vorbi, dar nu ai mai putea canta. Fara alergare, niciodata.",
+      lucreaza: "Inima, circulatia si arderea grasimii. Asta e partea care se vede cel mai mult pe cantar.",
+      atentie: "NU te tine de bare in timp ce mergi - strica postura si injumatateste efortul. Daca ti se taie respiratia, scazi viteza, nu te opresti brusc. Ultimele 2 minute le faci lent, ca sa cobori pulsul.",
+      usor: "Incepe cu 15 minute fara inclinatie si adaugi cate 5 minute pe saptamana. Daca genunchiul se incarca, dai inclinatia pe 0."
     }]
   },
   3: {
@@ -451,10 +479,10 @@ const PPL = {
     short: "CVADRICEPS · ISCHIO · FESIERI · GAMBE",
     color: "#22c55e",
     icon: "🟢",
-    nota: "Ziua cea mai importanta pentru genunchi si pentru mobilitate. Fara greutati mari, doar control.",
+    nota: "Ziua cea mai importanta pentru genunchi si mobilitate, si cea mai des sarita. Nu o sari. Fara greutati mari, doar control.",
     exercises: [{
       name: "Presa de picioare",
-      sets: "3 seturi × 10-12 repetari",
+      sets: "4 seturi × 10-12 repetari",
       muscle: "Cvadriceps / Fesieri",
       groups: ["cvadriceps", "fesieri"],
       rest: 150,
@@ -465,7 +493,7 @@ const PPL = {
       usor: "Coboara mai putin (jumatate de drum) si foloseste greutate mica. Presa e mult mai sigura pentru tine decat genuflexiunile cu bara."
     }, {
       name: "Ridicari de pe scaun cu gantera",
-      sets: "3 seturi × 8-10 repetari",
+      sets: "4 seturi × 8-10 repetari",
       muscle: "Cvadriceps / Fesieri",
       groups: ["cvadriceps", "fesieri"],
       rest: 120,
@@ -497,17 +525,6 @@ const PPL = {
       atentie: "Nu bloca genunchiul brusc si nu lasa greutatea sa cada. Daca simti durere in genunchi, redu amplitudinea.",
       usor: "Lucreaza doar pe ultima jumatate a miscarii, cu greutate mica."
     }, {
-      name: "Punte de fese",
-      sets: "2 seturi × 12-15 repetari",
-      muscle: "Fesieri",
-      groups: ["fesieri", "ischio"],
-      rest: 75,
-      repsOnly: true,
-      cum: "Culcat pe spate, genunchii indoiti, talpile pe podea. Ridici bazinul strangand fesele, tii 2 secunde sus, cobori lent.",
-      lucreaza: "Fesierii si spatele coapsei.",
-      atentie: "Ridicarea vine din fese, nu din sale. Nu te arcui exagerat.",
-      usor: "Tine 1 secunda si fa mai putine repetari. Pentru mai greu: pune o gantera pe bazin."
-    }, {
       name: "Ridicari pe varfuri",
       sets: "3 seturi × 15 repetari",
       muscle: "Gambe",
@@ -517,7 +534,33 @@ const PPL = {
       cum: "In picioare, te ridici pe varfuri cat de sus poti, tii o secunda, cobori lent pana la calcaie jos.",
       lucreaza: "Gambele - ajuta echilibrul si circulatia.",
       atentie: "Tine-te de ceva ca sa nu iti pierzi echilibrul. Fara sarituri.",
-      usor: "Fara greutate, doar cu corpul, tinandu-te de bara."
+      usor: "Fara greutate, doar cu corpul, tinandu-te de bara."    }, {
+      name: "Mers cu gantera intr-o mana",
+      sets: "3 seturi × 30 de pasi pe parte",
+      muscle: "Abdomen / Talie",
+      groups: ["abdomen"],
+      rest: 75,
+      inc: 2,
+      repsOnly: true,
+      finisher: true,
+      cum: "Iei o gantera grea intr-o singura mana, bratul intins pe langa corp. Mergi drept, cu umerii la acelasi nivel si fara sa te apleci in partea cu greutatea. 30 de pasi, schimbi mana, repeti. Abdomenul strans tot timpul.",
+      lucreaza: "Lateralele abdomenului si muschii care tin coloana dreapta. Lucreaza exact ca atunci cand cari o sacosa grea - de asta e util in viata de zi cu zi.",
+      atentie: "Nu te apleca in lateral si nu ridica umarul. Daca incepi sa te inclini, gantera e prea grea. Mergi lent, cu spatele drept si privirea in fata.",
+      usor: "Incepe cu 6-8 kg si 20 de pasi. Daca spatiul e mic, mergi dus-intors pe acelasi culoar."
+    }, {
+      name: "Mers pe banda 20 de minute",
+      sets: "1 serie × 20 de minute",
+      muscle: "Inima / Cardio",
+      groups: ["cardio"],
+      stat: "VIT",
+      rest: 0,
+      repsOnly: true,
+      finisher: true,
+      cardio: true,
+      cum: "La FINAL, dupa ce ai terminat exercitiile cu greutati. Ritm de plimbare vioaie: viteza 4,5-5,5 km/h, inclinatie 2-4 % daca banda are. Ritmul corect e acela in care inca poti vorbi, dar nu ai mai putea canta. Fara alergare, niciodata.",
+      lucreaza: "Inima, circulatia si arderea grasimii. Asta e partea care se vede cel mai mult pe cantar.",
+      atentie: "NU te tine de bare in timp ce mergi - strica postura si injumatateste efortul. Daca ti se taie respiratia, scazi viteza, nu te opresti brusc. Ultimele 2 minute le faci lent, ca sa cobori pulsul.",
+      usor: "Incepe cu 15 minute fara inclinatie si adaugi cate 5 minute pe saptamana. Daca genunchiul se incarca, dai inclinatia pe 0."
     }]
   },
   4: {
@@ -529,7 +572,7 @@ const PPL = {
     nota: "A doua zi de impingere, cu gantere. Ganterele cer mai mult echilibru - greutati mai mici.",
     exercises: [{
       name: "Presa cu gantere pe banca inclinata",
-      sets: "3 seturi × 10-12 repetari",
+      sets: "4 seturi × 10-12 repetari",
       muscle: "Piept sus",
       groups: ["piept", "umeri", "triceps"],
       rest: 120,
@@ -540,7 +583,7 @@ const PPL = {
       usor: "Fa-le pe banca mai inclinata (aproape sezand) - e mai putin solicitant pentru umar."
     }, {
       name: "Presa de umeri cu gantere, sezand",
-      sets: "3 seturi × 10-12 repetari",
+      sets: "4 seturi × 10-12 repetari",
       muscle: "Umeri",
       groups: ["umeri", "triceps"],
       rest: 120,
@@ -551,7 +594,7 @@ const PPL = {
       usor: "Gantere de 4-6 kg sunt un inceput perfect. Alterneaza bratele daca e mai comod."
     }, {
       name: "Fluturari cu gantere pe banca inclinata",
-      sets: "2 seturi × 12-15 repetari",
+      sets: "3 seturi × 12-15 repetari",
       muscle: "Piept",
       groups: ["piept"],
       rest: 90,
@@ -562,7 +605,7 @@ const PPL = {
       usor: "Fa aceeasi miscare la aparatul de fluturari, e mai sigur."
     }, {
       name: "Ridicari frontale la cablu",
-      sets: "2 seturi × 12-15 repetari",
+      sets: "3 seturi × 12-15 repetari",
       muscle: "Umeri fata",
       groups: ["umeri"],
       rest: 75,
@@ -594,6 +637,20 @@ const PPL = {
       lucreaza: "Abdomenul si muschii care nu lasa coloana sa se rasuceasca.",
       atentie: "Corpul sta nemiscat. Fara rotire din bazin. Greutate mica.",
       usor: "Sta mai aproape de aparat sau tine mai putine secunde."
+    }, {
+      name: "Mers pe banda 20 de minute",
+      sets: "1 serie × 20 de minute",
+      muscle: "Inima / Cardio",
+      groups: ["cardio"],
+      stat: "VIT",
+      rest: 0,
+      repsOnly: true,
+      finisher: true,
+      cardio: true,
+      cum: "La FINAL, dupa ce ai terminat exercitiile cu greutati. Ritm de plimbare vioaie: viteza 4,5-5,5 km/h, inclinatie 2-4 % daca banda are. Ritmul corect e acela in care inca poti vorbi, dar nu ai mai putea canta. Fara alergare, niciodata.",
+      lucreaza: "Inima, circulatia si arderea grasimii. Asta e partea care se vede cel mai mult pe cantar.",
+      atentie: "NU te tine de bare in timp ce mergi - strica postura si injumatateste efortul. Daca ti se taie respiratia, scazi viteza, nu te opresti brusc. Ultimele 2 minute le faci lent, ca sa cobori pulsul.",
+      usor: "Incepe cu 15 minute fara inclinatie si adaugi cate 5 minute pe saptamana. Daca genunchiul se incarca, dai inclinatia pe 0."
     }]
   },
   5: {
@@ -602,10 +659,10 @@ const PPL = {
     short: "SPATE · BICEPS",
     color: "#3b82f6",
     icon: "🔵",
-    nota: "Ultima zi de sala din saptamana. Sambata si duminica: odihna si cei 10.000 de pasi.",
+    nota: "Ultima zi de sala din saptamana. Sambata si duminica: odihna completa.",
     exercises: [{
       name: "Ramat cu gantera, sprijin pe banca",
-      sets: "3 seturi × 10-12 repetari",
+      sets: "4 seturi × 10-12 repetari",
       muscle: "Spate",
       groups: ["spate", "biceps"],
       rest: 120,
@@ -616,7 +673,7 @@ const PPL = {
       usor: "Sprijina-te cu pieptul pe o banca inclinata si trage cu ambele mani - zero incarcare pe lombar."
     }, {
       name: "Tractiuni la helcometru cu priza neutra",
-      sets: "3 seturi × 10-12 repetari",
+      sets: "4 seturi × 10-12 repetari",
       muscle: "Spate",
       groups: ["spate", "biceps"],
       rest: 120,
@@ -627,7 +684,7 @@ const PPL = {
       usor: "Greutate mai mica, 12 repetari lente."
     }, {
       name: "Pullover la cablu",
-      sets: "2 seturi × 12-15 repetari",
+      sets: "3 seturi × 12-15 repetari",
       muscle: "Spate",
       groups: ["spate"],
       rest: 75,
@@ -638,7 +695,7 @@ const PPL = {
       usor: "Greutate mica si amplitudine mai scurta."
     }, {
       name: "Fluturari inverse la aparat",
-      sets: "2 seturi × 15 repetari",
+      sets: "3 seturi × 15 repetari",
       muscle: "Umeri spate",
       groups: ["umeri", "spate"],
       rest: 60,
@@ -649,7 +706,7 @@ const PPL = {
       usor: "Aceeasi miscare cu gantere foarte usoare, aplecat pe o banca inclinata."
     }, {
       name: "Flexii ciocan cu gantere",
-      sets: "2 seturi × 12 repetari",
+      sets: "3 seturi × 12 repetari",
       muscle: "Biceps",
       groups: ["biceps"],
       rest: 75,
@@ -659,17 +716,31 @@ const PPL = {
       atentie: "Fara balans din spate.",
       usor: "Un brat pe rand, sezand."
     }, {
-      name: "Plank lateral pe genunchi",
-      sets: "3 seturi × 20 secunde pe parte",
+      name: "Plank lateral",
+      sets: "3 seturi × 30 secunde pe parte",
       muscle: "Abdomen",
       groups: ["abdomen"],
       rest: 60,
       repsOnly: true,
       finisher: true,
-      cum: "Culcat pe o parte, sprijin pe antebrat si pe genunchi. Ridici bazinul pana corpul e in linie. Tii, respiri normal, apoi schimbi partea.",
-      lucreaza: "Lateralele abdomenului - talia.",
-      atentie: "Nu lasi bazinul sa cada si nu te rasuci in fata.",
-      usor: "Incepe cu 10-15 secunde pe parte."
+      cum: "Culcat pe o parte, sprijin pe antebrat si pe marginea talpii de jos, picioarele intinse. Ridici bazinul pana corpul e in linie dreapta. Tii, respiri normal, apoi schimbi partea.",
+      lucreaza: "Lateralele abdomenului - talia si stabilitatea bazinului.",
+      atentie: "Nu lasi bazinul sa cada si nu te rasuci cu pieptul in fata. Cand bazinul incepe sa coboare, opresti seria.",
+      usor: "Varianta cu genunchii indoiti si sprijin pe genunchiul de jos, daca 30 de secunde pe talpi e prea mult."
+    }, {
+      name: "Mers pe banda 20 de minute",
+      sets: "1 serie × 20 de minute",
+      muscle: "Inima / Cardio",
+      groups: ["cardio"],
+      stat: "VIT",
+      rest: 0,
+      repsOnly: true,
+      finisher: true,
+      cardio: true,
+      cum: "La FINAL, dupa ce ai terminat exercitiile cu greutati. Ritm de plimbare vioaie: viteza 4,5-5,5 km/h, inclinatie 2-4 % daca banda are. Ritmul corect e acela in care inca poti vorbi, dar nu ai mai putea canta. Fara alergare, niciodata.",
+      lucreaza: "Inima, circulatia si arderea grasimii. Asta e partea care se vede cel mai mult pe cantar.",
+      atentie: "NU te tine de bare in timp ce mergi - strica postura si injumatateste efortul. Daca ti se taie respiratia, scazi viteza, nu te opresti brusc. Ultimele 2 minute le faci lent, ca sa cobori pulsul.",
+      usor: "Incepe cu 15 minute fara inclinatie si adaugi cate 5 minute pe saptamana. Daca genunchiul se incarca, dai inclinatia pe 0."
     }]
   },
   6: {
@@ -678,7 +749,7 @@ const PPL = {
     short: "ZI LIBERA",
     color: "#475569",
     icon: "⚫",
-    nota: "Zi libera. Doar cei 10.000 de pasi si proteina. Fara penalizari astazi.",
+    nota: "Zi libera. Fara sala, fara banda, fara penalizari. Odihna e parte din program.",
     exercises: []
   },
   0: {
@@ -687,7 +758,7 @@ const PPL = {
     short: "ZI LIBERA",
     color: "#475569",
     icon: "⚫",
-    nota: "Zi libera. Doar cei 10.000 de pasi si proteina. Fara penalizari astazi.",
+    nota: "Zi libera. Fara sala, fara banda, fara penalizari. Odihna e parte din program.",
     exercises: []
   }
 };
@@ -699,31 +770,33 @@ const ALT = {
   "Fluturari la aparat (Pec Deck)": ["Fluturari la cablu", "Fluturari cu gantere pe banca inclinata"],
   "Ridicari laterale cu gantere": ["Ridicari laterale la cablu", "Ridicari laterale la aparat"],
   "Extensii de triceps la cablu": ["Extensii deasupra capului cu gantera", "Extensii la aparat", "Flotari la banca (mainile pe banca)"],
-  "Plank pe genunchi": ["Dead bug (culcat, bratul si piciorul opus)", "Plank cu antebratele pe banca"],
+  "Plank": ["Dead bug", "Plank cu antebratele pe o banca", "Plank lateral"],
+  "Mers pe banda 20 de minute": ["Bicicleta eliptica 20 de minute", "Bicicleta orizontala 20 de minute", "Mers afara 20 de minute"],
+  "Mers cu gantera intr-o mana": ["Plank lateral", "Dead bug", "Presa Pallof la cablu"],
   "Tractiuni la helcometru": ["Helcometru cu priza neutra", "Ramat la aparat", "Pulldown cu un brat la cablu"],
   "Ramat la aparat cu sprijin pe piept": ["Ramat la cablu sezand", "Ramat cu gantera sprijinit pe banca"],
   "Ramat la cablu sezand": ["Ramat la aparat", "Ramat cu gantera un brat"],
   "Face pull la cablu": ["Fluturari inverse la aparat", "Desfacere banda elastica in fata"],
   "Flexii de biceps cu gantere": ["Flexii la cablu", "Flexii cu bara EZ", "Flexii ciocan"],
-  "Bird dog (caine-pasare)": ["Punte de fese", "Plank pe genunchi"],
+  "Dead bug": ["Plank", "Plank lateral", "Presa Pallof la cablu"],
   "Presa de picioare": ["Genuflexiuni la aparatul Smith, amplitudine mica", "Ridicari de pe scaun", "Presa cu un picior, greutate mica"],
   "Ridicari de pe scaun cu gantera": ["Presa de picioare", "Pas pe treapta joasa", "Genuflexiuni tinut de bara"],
   "Flexii de genunchi la aparat": ["Flexii sezand la aparat", "Punte de fese cu un picior"],
   "Extensii de genunchi la aparat": ["Presa de picioare cu amplitudine mica", "Ridicari de pe scaun"],
-  "Punte de fese": ["Extensii de bazin la aparat", "Bird dog"],
+  "Punte de fese": ["Extensii de bazin la aparat", "Punte de fese cu un picior"],
   "Ridicari pe varfuri": ["Ridicari pe varfuri la aparat", "Ridicari pe varfuri sezand"],
   "Presa cu gantere pe banca inclinata": ["Presa de piept la aparat", "Presa cu gantere pe banca dreapta"],
   "Presa de umeri cu gantere, sezand": ["Presa de umeri la aparat", "Presa la cablu"],
   "Fluturari cu gantere pe banca inclinata": ["Fluturari la aparat", "Fluturari la cablu"],
   "Ridicari frontale la cablu": ["Ridicari frontale cu gantere", "Ridicari laterale"],
   "Extensii de triceps deasupra capului": ["Extensii la cablu cu franghia", "Extensii la aparat"],
-  "Presa Pallof la cablu": ["Plank pe genunchi", "Bird dog", "Plank lateral pe genunchi"],
+  "Presa Pallof la cablu": ["Plank", "Dead bug", "Plank lateral"],
   "Ramat cu gantera, sprijin pe banca": ["Ramat la aparat cu sprijin pe piept", "Ramat la cablu sezand"],
   "Tractiuni la helcometru cu priza neutra": ["Tractiuni la helcometru priza larga", "Ramat la aparat"],
   "Pullover la cablu": ["Tractiuni la helcometru", "Pullover cu gantera pe banca"],
   "Fluturari inverse la aparat": ["Face pull la cablu", "Fluturari inverse cu gantere"],
   "Flexii ciocan cu gantere": ["Flexii cu gantere clasic", "Flexii la cablu"],
-  "Plank lateral pe genunchi": ["Plank pe genunchi", "Bird dog"]
+  "Plank lateral": ["Plank", "Dead bug", "Mers cu gantera intr-o mana"]
 };
 
 /* ─── INCALZIRE ─── */
@@ -811,17 +884,31 @@ const ACASA = {
       atentie: "Coatele aproape drepte, umerii jos.",
       usor: "Prinde banda mai lung."
     }, {
-      name: "Plank pe genunchi",
-      sets: "3 seturi × 20-30 secunde",
+      name: "Plank",
+      sets: "3 seturi × 30-45 secunde",
       muscle: "Abdomen",
       groups: ["abdomen"],
       rest: 60,
       repsOnly: true,
       finisher: true,
-      cum: "Sprijin pe antebrate si genunchi, corpul in linie dreapta, abdomenul si fesele stranse.",
+      cum: "Sprijin pe antebrate si pe varfuri, nu pe genunchi. Corpul in linie dreapta, abdomenul si fesele stranse. Tinta: 45 de secunde.",
       lucreaza: "Abdomenul si sprijinul coloanei.",
-      atentie: "Fara sale lasate. Respiri normal.",
-      usor: "15 secunde, sau antebratele pe marginea patului."
+      atentie: "Fara sale lasate si fara fund ridicat. Cand salele cad, opresti seria.",
+      usor: "3 serii de 20 de secunde, cu 5 secunde in plus pe saptamana."
+    }, {
+      name: "Mers alert 20 de minute",
+      sets: "1 serie × 20 de minute",
+      muscle: "Inima / Cardio",
+      groups: ["cardio"],
+      stat: "VIT",
+      rest: 0,
+      repsOnly: true,
+      finisher: true,
+      cardio: true,
+      cum: "Dupa exercitii, afara sau pe hol. Ritm vioi, in care inca poti vorbi dar nu ai putea canta. 20 de minute neintrerupt.",
+      lucreaza: "Inima, circulatia si arderea grasimii.",
+      atentie: "Daca e foarte cald, mergi dimineata sau seara si ia apa cu tine. Ultimele 2 minute lent.",
+      usor: "Incepe cu 15 minute si creste cate 5 minute pe saptamana. Se pot imparti in doua plimbari de cate 10 minute."
     }]
   },
   2: {
@@ -876,17 +963,31 @@ const ACASA = {
       atentie: "Coatele lipite de corp, fara balans.",
       usor: "Prinde banda mai lung."
     }, {
-      name: "Bird dog (caine-pasare)",
+      name: "Dead bug",
       sets: "3 seturi × 8 repetari pe parte",
       muscle: "Abdomen / Lombar",
-      groups: ["abdomen", "fesieri"],
+      groups: ["abdomen"],
       rest: 60,
       repsOnly: true,
       finisher: true,
-      cum: "In patru puncte. Intinzi bratul drept si piciorul stang in acelasi timp, tii 3 secunde, revii. Apoi invers.",
-      lucreaza: "Stabilitatea coloanei si fesierii.",
-      atentie: "Spatele drept, bazinul nu se roteste.",
-      usor: "Doar bratul, apoi doar piciorul."
+      cum: "Culcat pe spate. Bratele in sus spre tavan, genunchii indoiti la 90 de grade. Cobori bratul drept si piciorul stang in acelasi timp, revii, schimbi partea. Fara sprijin pe genunchi.",
+      lucreaza: "Abdomenul profund care tine coloana stabila.",
+      atentie: "Lombarul ramane lipit de podea. Daca se ridica, cobori mai putin.",
+      usor: "Doar bratele, apoi doar picioarele, separat."
+    }, {
+      name: "Mers alert 20 de minute",
+      sets: "1 serie × 20 de minute",
+      muscle: "Inima / Cardio",
+      groups: ["cardio"],
+      stat: "VIT",
+      rest: 0,
+      repsOnly: true,
+      finisher: true,
+      cardio: true,
+      cum: "Dupa exercitii, afara sau pe hol. Ritm vioi, in care inca poti vorbi dar nu ai putea canta. 20 de minute neintrerupt.",
+      lucreaza: "Inima, circulatia si arderea grasimii.",
+      atentie: "Daca e foarte cald, mergi dimineata sau seara si ia apa cu tine. Ultimele 2 minute lent.",
+      usor: "Incepe cu 15 minute si creste cate 5 minute pe saptamana. Se pot imparti in doua plimbari de cate 10 minute."
     }]
   },
   3: {
@@ -951,6 +1052,20 @@ const ACASA = {
       lucreaza: "Gambele, echilibrul si circulatia.",
       atentie: "Tine-te mereu de ceva. Fara sarituri.",
       usor: "Mai putine repetari, sprijinit cu ambele mani."
+    }, {
+      name: "Mers alert 20 de minute",
+      sets: "1 serie × 20 de minute",
+      muscle: "Inima / Cardio",
+      groups: ["cardio"],
+      stat: "VIT",
+      rest: 0,
+      repsOnly: true,
+      finisher: true,
+      cardio: true,
+      cum: "Dupa exercitii, afara sau pe hol. Ritm vioi, in care inca poti vorbi dar nu ai putea canta. 20 de minute neintrerupt.",
+      lucreaza: "Inima, circulatia si arderea grasimii.",
+      atentie: "Daca e foarte cald, mergi dimineata sau seara si ia apa cu tine. Ultimele 2 minute lent.",
+      usor: "Incepe cu 15 minute si creste cate 5 minute pe saptamana. Se pot imparti in doua plimbari de cate 10 minute."
     }]
   },
   4: {
@@ -1027,6 +1142,20 @@ const ACASA = {
       lucreaza: "Abdomenul profund, cel care protejeaza lombarul.",
       atentie: "Lombarul ramane lipit de podea tot timpul. Daca se ridica, cobori mai putin.",
       usor: "Misca doar bratele, apoi doar picioarele."
+    }, {
+      name: "Mers alert 20 de minute",
+      sets: "1 serie × 20 de minute",
+      muscle: "Inima / Cardio",
+      groups: ["cardio"],
+      stat: "VIT",
+      rest: 0,
+      repsOnly: true,
+      finisher: true,
+      cardio: true,
+      cum: "Dupa exercitii, afara sau pe hol. Ritm vioi, in care inca poti vorbi dar nu ai putea canta. 20 de minute neintrerupt.",
+      lucreaza: "Inima, circulatia si arderea grasimii.",
+      atentie: "Daca e foarte cald, mergi dimineata sau seara si ia apa cu tine. Ultimele 2 minute lent.",
+      usor: "Incepe cu 15 minute si creste cate 5 minute pe saptamana. Se pot imparti in doua plimbari de cate 10 minute."
     }]
   },
   5: {
@@ -1081,17 +1210,31 @@ const ACASA = {
       atentie: "Coatele lipite de corp.",
       usor: "Banda mai lunga, un brat pe rand."
     }, {
-      name: "Plank lateral pe genunchi",
-      sets: "3 seturi × 20 secunde pe parte",
+      name: "Plank lateral",
+      sets: "3 seturi × 30 secunde pe parte",
       muscle: "Abdomen",
       groups: ["abdomen"],
       rest: 60,
       repsOnly: true,
       finisher: true,
-      cum: "Culcat pe o parte, sprijin pe antebrat si genunchi, bazinul ridicat, corpul in linie.",
+      cum: "Culcat pe o parte, sprijin pe antebrat si pe talpi, picioarele intinse, bazinul ridicat, corpul in linie.",
       lucreaza: "Lateralele abdomenului.",
       atentie: "Bazinul nu cade, corpul nu se rasuceste.",
-      usor: "10-15 secunde pe parte."
+      usor: "Varianta cu genunchii indoiti, sprijin pe genunchiul de jos."
+    }, {
+      name: "Mers alert 20 de minute",
+      sets: "1 serie × 20 de minute",
+      muscle: "Inima / Cardio",
+      groups: ["cardio"],
+      stat: "VIT",
+      rest: 0,
+      repsOnly: true,
+      finisher: true,
+      cardio: true,
+      cum: "Dupa exercitii, afara sau pe hol. Ritm vioi, in care inca poti vorbi dar nu ai putea canta. 20 de minute neintrerupt.",
+      lucreaza: "Inima, circulatia si arderea grasimii.",
+      atentie: "Daca e foarte cald, mergi dimineata sau seara si ia apa cu tine. Ultimele 2 minute lent.",
+      usor: "Incepe cu 15 minute si creste cate 5 minute pe saptamana. Se pot imparti in doua plimbari de cate 10 minute."
     }]
   },
   6: {
@@ -1100,7 +1243,7 @@ const ACASA = {
     short: "ZI LIBERA",
     color: "#475569",
     icon: "⚫",
-    nota: "Zi libera. Doar cei 10.000 de pasi.",
+    nota: "Zi libera. Odihna completa, fara penalizari.",
     exercises: []
   },
   0: {
@@ -1109,7 +1252,7 @@ const ACASA = {
     short: "ZI LIBERA",
     color: "#475569",
     icon: "⚫",
-    nota: "Zi libera. Doar cei 10.000 de pasi.",
+    nota: "Zi libera. Odihna completa, fara penalizari.",
     exercises: []
   }
 };
@@ -1118,58 +1261,6 @@ const BANDA_NOTA = "Benzile elastice plate au rezistenta mica. Ca sa fie mai gre
    MISIUNI ZILNICE SI SAPTAMANALE
    ═══════════════════════════════════════════════════ */
 
-const DAILY_Q = [{
-  id: "pasi",
-  label: "10.000 de pasi",
-  sub: "Oriunde, oricand in cursul zilei. Se pot aduna din mai multe plimbari.",
-  stat: "VIT",
-  xp: 30,
-  icon: "👣",
-  groups: ["cardio"]
-}, {
-  id: "shake1",
-  label: "Shake proteina  nr. 1",
-  sub: "2 masuri, aproximativ 45 g proteina",
-  stat: "VIT",
-  xp: 5,
-  icon: "🥤",
-  subgroup: "proteina"
-}, {
-  id: "shake2",
-  label: "Shake proteina  nr. 2",
-  sub: "2 masuri, aproximativ 45 g proteina",
-  stat: "VIT",
-  xp: 5,
-  icon: "🥤",
-  subgroup: "proteina"
-}, {
-  id: "carne",
-  label: "Carne 280-310 g gatita",
-  sub: "Aproximativ 80 g proteina. Pui, curcan, vita sau peste.",
-  stat: "VIT",
-  xp: 5,
-  icon: "🍗",
-  subgroup: "proteina"
-}];
-const WEEKLY_OBJ = [{
-  id: "sauna1",
-  label: "Sauna  nr. 1",
-  icon: "🧖",
-  xp: 20,
-  stat: "VIT"
-}, {
-  id: "sauna2",
-  label: "Sauna  nr. 2",
-  icon: "🧖",
-  xp: 20,
-  stat: "VIT"
-}, {
-  id: "sauna3",
-  label: "Sauna  nr. 3",
-  icon: "🧖",
-  xp: 20,
-  stat: "VIT"
-}];
 const CITATE = [{
   text: "Nu trebuie sa fii cel mai bun. Trebuie doar sa fii mai bun decat ieri.",
   color: "#3b82f6"
@@ -1465,254 +1556,6 @@ function QuestPopup({
 }
 
 /* ─── FEREASTRA OBLIGATORIE: SOMN ─── */
-function SleepModal({
-  onSave,
-  onLater
-}) {
-  const [h, setH] = useState("");
-  const [r, setR] = useState(0);
-  return /*#__PURE__*/React.createElement("div", {
-    style: {
-      position: "fixed",
-      inset: 0,
-      zIndex: 10001,
-      background: "rgba(2,6,23,.97)",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      padding: 18,
-      overflowY: "auto"
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      width: "100%",
-      maxWidth: 520
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 46,
-      textAlign: "center",
-      marginBottom: 10
-    }
-  }, "😴"), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: F.xl,
-      fontWeight: 900,
-      color: "#c7d2fe",
-      textAlign: "center",
-      marginBottom: 8
-    }
-  }, "CAT AI DORMIT?"), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: F.md,
-      color: "#94a3b8",
-      textAlign: "center",
-      marginBottom: 22,
-      lineHeight: 1.5
-    }
-  }, "Se completeaza in fiecare zi. Somnul e jumatate din rezultat."), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: F.md,
-      color: "#cbd5e1",
-      marginBottom: 8,
-      fontWeight: 700
-    }
-  }, "Ore de somn"), /*#__PURE__*/React.createElement("input", {
-    type: "number",
-    inputMode: "decimal",
-    step: "0.5",
-    min: "0",
-    max: "14",
-    value: h,
-    placeholder: "de exemplu 7.5",
-    onChange: e => setH(e.target.value),
-    style: {
-      width: "100%",
-      padding: "18px 16px",
-      background: "rgba(0,0,0,.4)",
-      border: "2px solid rgba(99,102,241,.45)",
-      borderRadius: 12,
-      color: "#e2e8f0",
-      fontSize: F.xl,
-      fontFamily: "inherit",
-      outline: "none",
-      boxSizing: "border-box",
-      textAlign: "center",
-      fontWeight: 800,
-      marginBottom: 20
-    }
-  }), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: F.md,
-      color: "#cbd5e1",
-      marginBottom: 8,
-      fontWeight: 700
-    }
-  }, "Cum ai dormit?"), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      gap: 8,
-      marginBottom: 24
-    }
-  }, [1, 2, 3, 4, 5].map(n => /*#__PURE__*/React.createElement("button", {
-    key: n,
-    onClick: () => setR(n),
-    style: {
-      flex: 1,
-      padding: "16px 0",
-      background: n <= r ? "rgba(99,102,241,.35)" : "rgba(0,0,0,.35)",
-      border: "2px solid " + (n <= r ? "#a5b4fc" : "rgba(255,255,255,.12)"),
-      borderRadius: 12,
-      color: n <= r ? "#fbbf24" : "#475569",
-      fontSize: F.xl,
-      cursor: "pointer",
-      fontFamily: "inherit"
-    }
-  }, "★"))), /*#__PURE__*/React.createElement(BigBtn, {
-    onClick: () => {
-      if (!h || r === 0) {
-        alert("Scrie orele si alege cate stele.");
-        return;
-      }
-      onSave(h, r);
-    },
-    bg: "linear-gradient(135deg,rgba(99,102,241,.35),rgba(168,85,247,.2))",
-    border: "rgba(99,102,241,.6)",
-    color: "#c7d2fe"
-  }, "SALVEAZA SOMNUL"), /*#__PURE__*/React.createElement("button", {
-    onClick: onLater,
-    style: {
-      width: "100%",
-      marginTop: 14,
-      padding: "14px",
-      background: "transparent",
-      border: "none",
-      color: "#64748b",
-      fontSize: F.sm,
-      fontWeight: 700,
-      fontFamily: "inherit",
-      cursor: "pointer",
-      textDecoration: "underline"
-    }
-  }, "Mai tarziu")));
-}
-
-/* ─── FEREASTRA OBLIGATORIE: CANTAR (LUNEA) ─── */
-function WeightModal({
-  onSave,
-  onLater,
-  last
-}) {
-  const [w, setW] = useState("");
-  return /*#__PURE__*/React.createElement("div", {
-    style: {
-      position: "fixed",
-      inset: 0,
-      zIndex: 10001,
-      background: "rgba(2,6,23,.97)",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      padding: 18,
-      overflowY: "auto"
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      width: "100%",
-      maxWidth: 520
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 46,
-      textAlign: "center",
-      marginBottom: 10
-    }
-  }, "⚖️"), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: F.xl,
-      fontWeight: 900,
-      color: "#fcd34d",
-      textAlign: "center",
-      marginBottom: 8
-    }
-  }, "ESTE LUNI — CANTARIREA"), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: F.md,
-      color: "#94a3b8",
-      textAlign: "center",
-      marginBottom: 22,
-      lineHeight: 1.5
-    }
-  }, "Dimineata, dupa toaleta, inainte de micul dejun. O data pe saptamana, luni."), last ? /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: F.md,
-      color: "#94a3b8",
-      textAlign: "center",
-      marginBottom: 14
-    }
-  }, "Ultima cantarire: ", /*#__PURE__*/React.createElement("b", {
-    style: {
-      color: "#e2e8f0"
-    }
-  }, last.weight, " kg"), " (", last.date, ")") : null, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: F.md,
-      color: "#cbd5e1",
-      marginBottom: 8,
-      fontWeight: 700
-    }
-  }, "Greutate (kg)"), /*#__PURE__*/React.createElement("input", {
-    type: "number",
-    inputMode: "decimal",
-    step: "0.1",
-    value: w,
-    placeholder: "de exemplu 98.4",
-    onChange: e => setW(e.target.value),
-    style: {
-      width: "100%",
-      padding: "18px 16px",
-      background: "rgba(0,0,0,.4)",
-      border: "2px solid rgba(245,158,11,.45)",
-      borderRadius: 12,
-      color: "#e2e8f0",
-      fontSize: F.xxl,
-      fontFamily: "inherit",
-      outline: "none",
-      boxSizing: "border-box",
-      textAlign: "center",
-      fontWeight: 900,
-      marginBottom: 24
-    }
-  }), /*#__PURE__*/React.createElement(BigBtn, {
-    onClick: () => {
-      if (!w) {
-        alert("Scrie greutatea.");
-        return;
-      }
-      onSave(w);
-    },
-    bg: "linear-gradient(135deg,rgba(245,158,11,.3),rgba(234,88,12,.18))",
-    border: "rgba(245,158,11,.6)",
-    color: "#fcd34d"
-  }, "SALVEAZA GREUTATEA"), /*#__PURE__*/React.createElement("button", {
-    onClick: onLater,
-    style: {
-      width: "100%",
-      marginTop: 14,
-      padding: "14px",
-      background: "transparent",
-      border: "none",
-      color: "#64748b",
-      fontSize: F.sm,
-      fontWeight: 700,
-      fontFamily: "inherit",
-      cursor: "pointer",
-      textDecoration: "underline"
-    }
-  }, "Mai tarziu")));
-}
-
-/* ─── LISTA DE PASI (incalzire / relaxare) ─── */
 function PasiLista({
   data,
   color
@@ -1756,218 +1599,6 @@ function PasiLista({
   }, p))));
 }
 /* ═══════════════ TAB: AZI ═══════════════ */
-
-function QuestBtn({
-  q,
-  activ,
-  onClick
-}) {
-  return /*#__PURE__*/React.createElement("button", {
-    onClick: onClick,
-    style: {
-      width: "100%",
-      display: "flex",
-      alignItems: "center",
-      gap: 14,
-      padding: "18px 16px",
-      marginBottom: 12,
-      background: activ ? "rgba(34,197,94,.14)" : "rgba(255,255,255,.04)",
-      border: "2px solid " + (activ ? "rgba(34,197,94,.5)" : "rgba(255,255,255,.1)"),
-      borderRadius: 14,
-      cursor: "pointer",
-      fontFamily: "inherit",
-      textAlign: "left"
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      minWidth: 40,
-      height: 40,
-      borderRadius: 10,
-      border: "3px solid " + (activ ? "#22c55e" : "#475569"),
-      background: activ ? "#22c55e" : "transparent",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      fontSize: 24,
-      color: "#052e16",
-      fontWeight: 900
-    }
-  }, activ ? "✓" : ""), /*#__PURE__*/React.createElement("div", {
-    style: {
-      flex: 1
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: F.md,
-      fontWeight: 800,
-      color: activ ? "#86efac" : "#e2e8f0",
-      textDecoration: activ ? "line-through" : "none",
-      lineHeight: 1.3
-    }
-  }, q.icon, " ", q.label), q.sub ? /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: F.xs,
-      color: "#94a3b8",
-      marginTop: 4,
-      lineHeight: 1.4
-    }
-  }, q.sub) : null), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: F.sm,
-      fontWeight: 900,
-      color: activ ? "#4ade80" : "#64748b"
-    }
-  }, "+", q.xp));
-}
-function TabAzi({
-  ctx
-}) {
-  const {
-    done,
-    doneW,
-    toggleQ,
-    toggleW,
-    ziAzi,
-    setTab,
-    S,
-    todayStr,
-    todayDow,
-    doneEx
-  } = ctx;
-  const principale = DAILY_Q.filter(q => !q.subgroup);
-  const proteine = DAILY_Q.filter(q => q.subgroup === "proteina");
-  const protDone = proteine.filter(q => done.includes(q.id)).length;
-  const somnAzi = (S.sleepLog || []).find(s => s.date === todayStr);
-  const totalEx = (ziAzi.exercises || []).length;
-  const facuteEx = (ziAzi.exercises || []).filter(e => doneEx.includes(e.name)).length;
-  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("button", {
-    onClick: () => setTab("sala"),
-    style: {
-      width: "100%",
-      textAlign: "left",
-      cursor: "pointer",
-      fontFamily: "inherit",
-      background: "rgba(255,255,255,.04)",
-      border: "2px solid " + ziAzi.color,
-      borderRadius: 14,
-      padding: 18,
-      marginBottom: 22
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: F.sm,
-      color: "#94a3b8",
-      fontWeight: 700,
-      marginBottom: 4
-    }
-  }, DOW_RO[todayDow].toUpperCase(), " — ANTRENAMENTUL DE AZI"), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: F.xxl,
-      fontWeight: 900,
-      color: ziAzi.color,
-      lineHeight: 1.1
-    }
-  }, ziAzi.icon, " ", ziAzi.type), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: F.md,
-      color: "#cbd5e1",
-      marginTop: 6
-    }
-  }, ziAzi.short), totalEx > 0 ? /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: F.md,
-      color: facuteEx === totalEx ? "#4ade80" : "#f59e0b",
-      marginTop: 10,
-      fontWeight: 800
-    }
-  }, facuteEx, " din ", totalEx, " exercitii facute →") : /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: F.md,
-      color: "#94a3b8",
-      marginTop: 10,
-      fontWeight: 700
-    }
-  }, "Zi de odihna. Doar pasii.")), /*#__PURE__*/React.createElement(Sect, {
-    title: "MISIUNI ZILNICE",
-    right: done.filter(d => DAILY_Q.some(q => q.id === d)).length + " / " + DAILY_Q.length
-  }, principale.map(q => /*#__PURE__*/React.createElement(QuestBtn, {
-    key: q.id,
-    q: q,
-    activ: done.includes(q.id),
-    onClick: () => toggleQ(q.id)
-  }))), /*#__PURE__*/React.createElement(Sect, {
-    title: "PROTEINA",
-    right: protDone + " / " + proteine.length,
-    color: "#f472b6"
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: F.sm,
-      color: "#94a3b8",
-      marginBottom: 12,
-      lineHeight: 1.5
-    }
-  }, "Toate trei inseamna aproximativ 170 g de proteina pe zi. Proteina tine muschiul cand slabesti."), proteine.map(q => /*#__PURE__*/React.createElement(QuestBtn, {
-    key: q.id,
-    q: q,
-    activ: done.includes(q.id),
-    onClick: () => toggleQ(q.id)
-  }))), /*#__PURE__*/React.createElement(Sect, {
-    title: "OBIECTIVE SAPTAMANALE",
-    right: doneW.length + " / " + WEEKLY_OBJ.length,
-    color: "#22d3ee"
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: F.sm,
-      color: "#94a3b8",
-      marginBottom: 12,
-      lineHeight: 1.5
-    }
-  }, "Se reseteaza in fiecare luni. Ce nu bifezi pana duminica seara se penalizeaza."), WEEKLY_OBJ.map(q => /*#__PURE__*/React.createElement(QuestBtn, {
-    key: q.id,
-    q: q,
-    activ: doneW.includes(q.id),
-    onClick: () => toggleW(q.id)
-  }))), /*#__PURE__*/React.createElement(Sect, {
-    title: "SOMN",
-    color: "#a5b4fc"
-  }, somnAzi ? /*#__PURE__*/React.createElement("div", {
-    style: cardStyle("rgba(99,102,241,.35)")
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: F.lg,
-      fontWeight: 900,
-      color: "#c7d2fe"
-    }
-  }, "😴 ", somnAzi.hours, " ore · ", "★".repeat(somnAzi.rating)), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: F.sm,
-      color: "#94a3b8",
-      marginTop: 6
-    }
-  }, "Completat astazi. Bravo.")) : /*#__PURE__*/React.createElement(BigBtn, {
-    onClick: () => ctx.setReminder("somn"),
-    bg: "rgba(99,102,241,.18)",
-    border: "rgba(99,102,241,.5)",
-    color: "#c7d2fe"
-  }, "😴 SCRIE CAT AI DORMIT")), todayDow === 1 ? /*#__PURE__*/React.createElement(Sect, {
-    title: "CANTARIREA DE LUNI",
-    color: "#fcd34d"
-  }, (S.weightLog || []).some(w => w.iso === todayStr) ? /*#__PURE__*/React.createElement("div", {
-    style: cardStyle("rgba(245,158,11,.35)")
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: F.lg,
-      fontWeight: 900,
-      color: "#fcd34d"
-    }
-  }, "⚖️ ", (S.weightLog[S.weightLog.length - 1] || {}).weight, " kg — inregistrat astazi")) : /*#__PURE__*/React.createElement(BigBtn, {
-    onClick: () => ctx.setReminder("cantar"),
-    bg: "rgba(245,158,11,.18)",
-    border: "rgba(245,158,11,.5)",
-    color: "#fcd34d"
-  }, "⚖️ CANTARESTE-TE ACUM")) : null);
-}
-/* ═══════════════ TAB: SALA ═══════════════ */
 
 function nrSeturi(txt) {
   const m = (txt || "").match(/^(\d+)/);
@@ -2552,7 +2183,7 @@ function TabSala({
       color: "#94a3b8",
       lineHeight: 1.5
     }
-  }, "Muschiul creste in zilele de pauza, nu la sala. Astazi doar cei 10.000 de pasi si proteina.")) : /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("button", {
+  }, "Muschiul creste in zilele de pauza, nu la sala. Astazi nu ai nimic de facut.")) : /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("button", {
     onClick: () => setShowReguli(!showReguli),
     style: {
       width: "100%",
@@ -2859,258 +2490,6 @@ function TabProgres({
 
 /* ═══════════════ TAB: CORP ═══════════════ */
 
-function TabCorp({
-  ctx
-}) {
-  const {
-    S,
-    weightLog,
-    update,
-    setNotif,
-    setReminder
-  } = ctx;
-  const [tinta, setTinta] = useState(S.targetWeight || "");
-  const wl = weightLog || [];
-  const prima = wl.length ? wl[0] : null;
-  const ultima = wl.length ? wl[wl.length - 1] : null;
-  const dif = prima && ultima ? Math.round((ultima.weight - prima.weight) * 10) / 10 : 0;
-  const sleep = (S.sleepLog || []).slice(-14).reverse();
-  const mediaSomn = sleep.length ? Math.round(sleep.reduce((s, x) => s + x.hours, 0) / sleep.length * 10) / 10 : 0;
-  const vals = wl.map(w => w.weight);
-  const minV = vals.length ? Math.min(...vals) - 1 : 0;
-  const maxV = vals.length ? Math.max(...vals) + 1 : 1;
-  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(Sect, {
-    title: "GREUTATE",
-    color: "#fcd34d"
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      gap: 12,
-      marginBottom: 14
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      ...cardStyle(),
-      flex: 1,
-      textAlign: "center",
-      marginBottom: 0
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: F.xxl,
-      fontWeight: 900,
-      color: "#e2e8f0"
-    }
-  }, ultima ? ultima.weight : "—"), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: F.sm,
-      color: "#94a3b8",
-      fontWeight: 700
-    }
-  }, "acum (kg)")), /*#__PURE__*/React.createElement("div", {
-    style: {
-      ...cardStyle(),
-      flex: 1,
-      textAlign: "center",
-      marginBottom: 0
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: F.xxl,
-      fontWeight: 900,
-      color: dif < 0 ? "#4ade80" : dif > 0 ? "#f87171" : "#94a3b8"
-    }
-  }, dif > 0 ? "+" : "", dif), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: F.sm,
-      color: "#94a3b8",
-      fontWeight: 700
-    }
-  }, "fata de start"))), wl.length > 1 ? /*#__PURE__*/React.createElement("div", {
-    style: cardStyle()
-  }, /*#__PURE__*/React.createElement("svg", {
-    viewBox: "0 0 320 130",
-    style: {
-      width: "100%",
-      height: 150
-    }
-  }, /*#__PURE__*/React.createElement("polyline", {
-    fill: "none",
-    stroke: "#fbbf24",
-    strokeWidth: "3",
-    points: wl.slice(-12).map((w, i, a) => {
-      const x = a.length === 1 ? 160 : 10 + i * 300 / (a.length - 1);
-      const y = 115 - (w.weight - minV) / (maxV - minV) * 100;
-      return x + "," + y;
-    }).join(" ")
-  }), wl.slice(-12).map((w, i, a) => {
-    const x = a.length === 1 ? 160 : 10 + i * 300 / (a.length - 1);
-    const y = 115 - (w.weight - minV) / (maxV - minV) * 100;
-    return /*#__PURE__*/React.createElement("circle", {
-      key: i,
-      cx: x,
-      cy: y,
-      r: "4",
-      fill: "#fbbf24"
-    });
-  })), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      justifyContent: "space-between",
-      fontSize: F.xs,
-      color: "#64748b"
-    }
-  }, /*#__PURE__*/React.createElement("span", null, wl.slice(-12)[0].date), /*#__PURE__*/React.createElement("span", null, ultima.date))) : null, /*#__PURE__*/React.createElement(BigBtn, {
-    onClick: () => setReminder("cantar"),
-    bg: "rgba(245,158,11,.16)",
-    border: "rgba(245,158,11,.45)",
-    color: "#fcd34d",
-    style: {
-      marginBottom: 14
-    }
-  }, "⚖️ ADAUGA O CANTARIRE"), /*#__PURE__*/React.createElement("div", {
-    style: cardStyle()
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: F.md,
-      fontWeight: 800,
-      color: "#cbd5e1",
-      marginBottom: 10
-    }
-  }, "Greutatea tinta (kg)"), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      gap: 10
-    }
-  }, /*#__PURE__*/React.createElement("input", {
-    type: "number",
-    inputMode: "decimal",
-    value: tinta,
-    placeholder: "—",
-    onChange: e => setTinta(e.target.value),
-    style: {
-      flex: 1,
-      padding: "14px 12px",
-      background: "rgba(0,0,0,.35)",
-      border: "2px solid rgba(255,255,255,.15)",
-      borderRadius: 10,
-      color: "#e2e8f0",
-      fontSize: F.lg,
-      fontWeight: 800,
-      textAlign: "center",
-      fontFamily: "inherit",
-      outline: "none",
-      boxSizing: "border-box"
-    }
-  }), /*#__PURE__*/React.createElement("button", {
-    onClick: () => {
-      update({
-        targetWeight: parseFloat(tinta) || null
-      });
-      setNotif("🎯 Tinta salvata");
-    },
-    style: {
-      padding: "14px 20px",
-      background: "rgba(59,130,246,.18)",
-      border: "2px solid rgba(59,130,246,.45)",
-      borderRadius: 10,
-      color: "#93c5fd",
-      fontSize: F.md,
-      fontWeight: 900,
-      fontFamily: "inherit",
-      cursor: "pointer"
-    }
-  }, "SALVEAZA")), S.targetWeight && ultima ? /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: F.md,
-      color: "#94a3b8",
-      marginTop: 12,
-      lineHeight: 1.5
-    }
-  }, "Mai ai ", /*#__PURE__*/React.createElement("b", {
-    style: {
-      color: "#fcd34d"
-    }
-  }, Math.round((ultima.weight - S.targetWeight) * 10) / 10, " kg"), " pana la tinta. Ritm sanatos: 0,5 kg pe saptamana.") : null), wl.length ? /*#__PURE__*/React.createElement("div", {
-    style: cardStyle()
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: F.md,
-      fontWeight: 800,
-      color: "#cbd5e1",
-      marginBottom: 10
-    }
-  }, "Istoric cantariri"), [...wl].reverse().slice(0, 12).map((w, i) => /*#__PURE__*/React.createElement("div", {
-    key: i,
-    style: {
-      display: "flex",
-      justifyContent: "space-between",
-      padding: "10px 0",
-      borderBottom: "1px solid rgba(255,255,255,.06)",
-      fontSize: F.md
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      color: "#94a3b8"
-    }
-  }, w.date), /*#__PURE__*/React.createElement("span", {
-    style: {
-      color: "#e2e8f0",
-      fontWeight: 800
-    }
-  }, w.weight, " kg")))) : null), /*#__PURE__*/React.createElement(Sect, {
-    title: "SOMN",
-    color: "#a5b4fc"
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      ...cardStyle(),
-      textAlign: "center"
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: F.xxl,
-      fontWeight: 900,
-      color: "#c7d2fe"
-    }
-  }, mediaSomn || "—"), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: F.sm,
-      color: "#94a3b8",
-      fontWeight: 700
-    }
-  }, "ore in medie (ultimele 2 saptamani)")), /*#__PURE__*/React.createElement(BigBtn, {
-    onClick: () => setReminder("somn"),
-    bg: "rgba(99,102,241,.16)",
-    border: "rgba(99,102,241,.45)",
-    color: "#c7d2fe",
-    style: {
-      marginBottom: 14
-    }
-  }, "😴 SCRIE SOMNUL DE AZI"), sleep.length ? /*#__PURE__*/React.createElement("div", {
-    style: cardStyle()
-  }, sleep.map((s, i) => /*#__PURE__*/React.createElement("div", {
-    key: i,
-    style: {
-      display: "flex",
-      justifyContent: "space-between",
-      padding: "10px 0",
-      borderBottom: "1px solid rgba(255,255,255,.06)",
-      fontSize: F.md
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    style: {
-      color: "#94a3b8"
-    }
-  }, s.date), /*#__PURE__*/React.createElement("span", {
-    style: {
-      color: "#e2e8f0",
-      fontWeight: 800
-    }
-  }, s.hours, " ore · ", "★".repeat(s.rating))))) : null));
-}
-
-/* ═══════════════ TAB: SETARI ═══════════════ */
-
 function TabSetari({
   ctx
 }) {
@@ -3139,7 +2518,7 @@ function TabSetari({
       marginBottom: 14,
       lineHeight: 1.55
     }
-  }, "Cand esti plecat de acasa: antrenamentele de sala sunt inlocuite cu antrenamente cu banda elastica si greutatea corpului, iar penalizarile se opresc complet. Pasii si proteina raman."), /*#__PURE__*/React.createElement(BigBtn, {
+  }, "Cand esti plecat de acasa: antrenamentele de sala sunt inlocuite cu antrenamente cu banda elastica si greutatea corpului, iar mersul pe banda devine mers afara. Penalizarile se opresc complet."), /*#__PURE__*/React.createElement(BigBtn, {
     onClick: () => {
       update({
         vacation: !vacation
@@ -3298,8 +2677,7 @@ function App() {
   const [notif, setNotif] = useState(null);
   const [showLvl, setShowLvl] = useState(false);
   const [questPopup, setQuestPopup] = useState(null);
-  const [reminder, setReminder] = useState(null);
-  const [tab, setTab] = useState("azi");
+  const [tab, setTab] = useState("sala");
   const [selDay, setSelDay] = useState(new Date().getDay());
   const [openEx, setOpenEx] = useState(null);
   const [swapModal, setSwapModal] = useState(null);
@@ -3312,7 +2690,6 @@ function App() {
   const [lastSaved, setLastSaved] = useState(null);
   const [exportStr, setExportStr] = useState("");
   const [importStr, setImportStr] = useState("");
-  const amanat = useRef({});
   const todayStr = new Date().toISOString().slice(0, 10);
   const todayDow = new Date().getDay();
   const update = changes => {
@@ -3362,14 +2739,7 @@ function App() {
             let total = 0,
               missedCount = 0;
             const det = [];
-            const missedQ = DAILY_Q.filter(q => !st.done.includes(q.id));
-            if (missedQ.length) {
-              const p = missedQ.reduce((s, q) => s + q.xp, 0);
-              total += p;
-              missedCount += missedQ.length;
-              det.push(missedQ.length + " misiuni (-" + p + ")");
-            }
-            const yPPL = PPL[yDay];
+            const yPPL = (st.vacation ? ACASA : PPL)[yDay];
             if (yPPL && yPPL.type !== "ODIHNA") {
               const missedEx = yPPL.exercises.filter(ex => !ex.finisher && !st.doneEx.includes(ex.name));
               if (missedEx.length) {
@@ -3405,37 +2775,25 @@ function App() {
           g.current.lastDailyReset = todayStr;
         }
 
-        /* resetare saptamanala */
-        const wk = getWeekId(new Date());
-        if (g.current.lastWeeklyReset && g.current.lastWeeklyReset !== wk) {
-          const ch = {
-            doneW: [],
-            lastWeeklyReset: wk
-          };
-          if (!g.current.vacation) {
-            const missed = WEEKLY_OBJ.filter(q => !g.current.doneW.includes(q.id));
-            if (missed.length) {
-              const pen = missed.reduce((s, q) => s + q.xp, 0);
-              const nx = g.current.xp - pen;
-              const nl = nx < 0 ? Math.max(1, g.current.level - 1) : g.current.level;
-              Object.assign(ch, {
-                xp: nx < 0 ? Math.max(0, getXp(nl) + nx) : nx,
-                level: nl,
-                totalXp: Math.max(0, g.current.totalXp - pen),
-                penaltyLog: [...g.current.penaltyLog, {
-                  date: g.current.lastWeeklyReset,
-                  missed: missed.length,
-                  penalty: pen,
-                  tip: "saptamanal"
-                }]
-              });
-              setTimeout(() => setNotif("⚠️ -" + pen + " XP · obiective saptamanale ratate"), 1800);
-            }
+        /* ─── MIGRARE v2: XP recalculat din munca reala ─── */
+        if (!g.current.v2) {
+          const totalEx = Object.values(g.current.workoutCalendar || {}).reduce((a, b) => a + b, 0);
+          let pool = totalEx * 10;
+          let lvl = 1;
+          while (pool >= getXp(lvl) && lvl < 200) {
+            pool -= getXp(lvl);
+            lvl++;
           }
-          Object.assign(g.current, ch);
-          await saveToIDB(g.current);
-        } else if (!g.current.lastWeeklyReset) {
-          g.current.lastWeeklyReset = wk;
+          Object.assign(g.current, {
+            v2: true,
+            level: lvl,
+            xp: pool,
+            totalXp: totalEx * 10,
+            penaltyLog: [],
+            done: [],
+            doneW: []
+          });
+          setTimeout(() => setNotif("Nivel recalculat din antrenamentele facute: nivelul " + lvl), 1200);
         }
         await saveToIDB(g.current);
       } catch (e) {
@@ -3446,25 +2804,6 @@ function App() {
       }
     })();
   }, []);
-
-  /* ─── FERESTRE OBLIGATORII: SOMN ZILNIC · CANTAR LUNEA ─── */
-  useEffect(() => {
-    if (!loaded || reminder) return;
-    const sl = g.current.sleepLog || [];
-    const somnAzi = sl.some(s => s.date === todayStr);
-    if (!somnAzi && !amanat.current.somn) {
-      const t = setTimeout(() => setReminder("somn"), 900);
-      return () => clearTimeout(t);
-    }
-    if (todayDow === 1) {
-      const wl = g.current.weightLog || [];
-      const cantaritAzi = wl.some(w => w.iso === todayStr);
-      if (!cantaritAzi && !amanat.current.cantar) {
-        const t = setTimeout(() => setReminder("cantar"), 900);
-        return () => clearTimeout(t);
-      }
-    }
-  }, [loaded, reminder, _v]);
 
   /* ─── CRONOMETRU PAUZA ─── */
   useEffect(() => {
@@ -3554,59 +2893,6 @@ function App() {
     });
     if (soundOn) playSound("bifa");
   };
-  const toggleQ = id => {
-    const q = DAILY_Q.find(x => x.id === id);
-    if (!q) return;
-    const nm = {
-      ...muscleXp
-    };
-    if (done.includes(id)) {
-      (q.groups || []).forEach(k => {
-        nm[k] = Math.max(0, (nm[k] || 0) - 3);
-      });
-      const c = calcRem(q.xp, q.stat);
-      update({
-        done: done.filter(x => x !== id),
-        qC: Math.max(0, S.qC - 1),
-        muscleXp: nm,
-        ...c
-      });
-      setNotif("↩ Anulat · -" + c._g + " XP");
-    } else {
-      (q.groups || []).forEach(k => {
-        nm[k] = (nm[k] || 0) + 3;
-      });
-      const c = calcAdd(q.xp, q.stat);
-      update({
-        done: [...done, id],
-        qC: S.qC + 1,
-        muscleXp: nm,
-        ...c
-      });
-      if (c.level > level) setShowLvl(true);
-      popQuest(c._g, c._m);
-    }
-  };
-  const toggleW = id => {
-    const q = WEEKLY_OBJ.find(x => x.id === id);
-    if (!q) return;
-    if (doneW.includes(id)) {
-      const c = calcRem(q.xp, q.stat);
-      update({
-        doneW: doneW.filter(x => x !== id),
-        ...c
-      });
-      setNotif("↩ Anulat · -" + c._g + " XP");
-    } else {
-      const c = calcAdd(q.xp, q.stat);
-      update({
-        doneW: [...doneW, id],
-        ...c
-      });
-      if (c.level > level) setShowLvl(true);
-      popQuest(c._g, c._m);
-    }
-  };
   const toggleEx = ex => {
     const nm = {
       ...muscleXp
@@ -3615,7 +2901,7 @@ function App() {
       (ex.groups || []).forEach(k => {
         nm[k] = Math.max(0, (nm[k] || 0) - 5);
       });
-      const c = calcRem(10, "STR");
+      const c = calcRem(10, ex.stat || "STR");
       update({
         doneEx: doneEx.filter(x => x !== ex.name),
         muscleXp: nm,
@@ -3626,7 +2912,7 @@ function App() {
       (ex.groups || []).forEach(k => {
         nm[k] = (nm[k] || 0) + 5;
       });
-      const c = calcAdd(10, "STR");
+      const c = calcAdd(10, ex.stat || "STR");
       const wc = {
         ...(S.workoutCalendar || {})
       };
@@ -3687,7 +2973,7 @@ function App() {
       (ex.groups || []).forEach(k => {
         nm[k] = (nm[k] || 0) + 5;
       });
-      const c = calcAdd(10, "STR");
+      const c = calcAdd(10, ex.stat || "STR");
       const wc = {
         ...(S.workoutCalendar || {})
       };
@@ -3720,7 +3006,7 @@ function App() {
       (ex.groups || []).forEach(k => {
         nm[k] = Math.max(0, (nm[k] || 0) - 5);
       });
-      const c = calcRem(10, "STR");
+      const c = calcRem(10, ex.stat || "STR");
       Object.assign(changes, {
         doneEx: doneEx.filter(x => x !== name),
         muscleXp: nm,
@@ -3760,33 +3046,6 @@ function App() {
     update({
       exerciseSwaps: sw
     });
-  };
-
-  /* ─── SOMN SI CANTAR ─── */
-  const logSomn = (ore, stele) => {
-    const rest = (S.sleepLog || []).filter(s => s.date !== todayStr);
-    const nl = [...rest, {
-      date: todayStr,
-      hours: parseFloat(ore),
-      rating: parseInt(stele)
-    }].sort((a, b) => a.date.localeCompare(b.date)).slice(-120);
-    update({
-      sleepLog: nl
-    });
-    setReminder(null);
-    setNotif("😴 Somn salvat: " + ore + " ore");
-  };
-  const logGreutate = kg => {
-    const nl = [...(S.weightLog || []), {
-      iso: todayStr,
-      date: new Date().toLocaleDateString("ro-RO"),
-      weight: parseFloat(kg)
-    }];
-    update({
-      weightLog: nl
-    });
-    setReminder(null);
-    setNotif("⚖️ Greutate salvata: " + kg + " kg");
   };
 
   /* ─── CRONOMETRU ─── */
@@ -3835,8 +3094,6 @@ function App() {
     ziAzi,
     selDay,
     setSelDay,
-    toggleQ,
-    toggleW,
     toggleEx,
     logSets,
     stergeAzi,
@@ -3869,9 +3126,6 @@ function App() {
     setImportStr,
     lastSaved,
     setLastSaved,
-    logGreutate,
-    logSomn,
-    setReminder,
     getMult
   };
   if (!loaded) {
@@ -3886,10 +3140,6 @@ function App() {
     }, "Se incarca...");
   }
   const tabs = [{
-    k: "azi",
-    i: "✅",
-    l: "AZI"
-  }, {
     k: "sala",
     i: "🏋️",
     l: "SALA"
@@ -3897,10 +3147,6 @@ function App() {
     k: "progres",
     i: "📈",
     l: "PROGRES"
-  }, {
-    k: "corp",
-    i: "⚖️",
-    l: "CORP"
   }, {
     k: "setari",
     i: "⚙️",
@@ -4012,13 +3258,9 @@ function App() {
     style: {
       padding: 16
     }
-  }, tab === "azi" && /*#__PURE__*/React.createElement(TabAzi, {
-    ctx: ctx
-  }), tab === "sala" && /*#__PURE__*/React.createElement(TabSala, {
+  }, tab === "sala" && /*#__PURE__*/React.createElement(TabSala, {
     ctx: ctx
   }), tab === "progres" && /*#__PURE__*/React.createElement(TabProgres, {
-    ctx: ctx
-  }), tab === "corp" && /*#__PURE__*/React.createElement(TabCorp, {
     ctx: ctx
   }), tab === "setari" && /*#__PURE__*/React.createElement(TabSetari, {
     ctx: ctx
@@ -4103,20 +3345,7 @@ function App() {
       fontWeight: 800,
       marginTop: 3
     }
-  }, t.l)))), reminder === "somn" ? /*#__PURE__*/React.createElement(SleepModal, {
-    onSave: logSomn,
-    onLater: () => {
-      amanat.current.somn = true;
-      setReminder(null);
-    }
-  }) : null, reminder === "cantar" ? /*#__PURE__*/React.createElement(WeightModal, {
-    onSave: logGreutate,
-    onLater: () => {
-      amanat.current.cantar = true;
-      setReminder(null);
-    },
-    last: weightLog.length ? weightLog[weightLog.length - 1] : null
-  }) : null, notif ? /*#__PURE__*/React.createElement(Notif, {
+  }, t.l)))), notif ? /*#__PURE__*/React.createElement(Notif, {
     msg: notif,
     onDone: () => setNotif(null)
   }) : null, showLvl ? /*#__PURE__*/React.createElement(LvlModal, {
